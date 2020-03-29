@@ -3,28 +3,20 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model');
 
-class Property extends Model {
-  up() {
-    this.create('properties', (table) => {
-      table.increments();
-      table
-        .integer('user_id')
-        .unsigned()
-        .references('id')
-        .inTable('users')
-        .onUpdate('CASCADE')
-        .onDelete('CASCADE');
-      table.string('title').notNullable();
-      table.string('adress').notNullable();
-      table.decimal('price').notNullable();
-      table.decimal('latitude', 9, 6).notNullable();
-      table.decimal('longitude', 9, 6).notNullable();
-      table.timestamps();
-    });
-  }
+const Database = use('Database');
 
-  down() {
-    this.drop('properties');
+class Property extends Model {
+  static scopeNearBy(query, latitude, longitude, distance) {
+    const haversine = `(6371 * acos(cos(radians(${latitude}))
+      * cos(radians(latitude))
+      * cos(radians(longitude)
+      - radians(${longitude}))
+      + sin(radians(${latitude}))
+      * sin(radians(latitude))))`;
+
+    return query
+      .select('*', Database.raw(`${haversine} as distance`))
+      .whereRaw(`${haversine} < ${distance}`);
   }
 
   user() {
