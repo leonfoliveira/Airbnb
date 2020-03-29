@@ -22,7 +22,10 @@ class PropertyController {
   async index({ request, response, view }) {
     const { latitude, longitude } = request.all();
 
-    const properties = Property.query().nearBy(latitude, longitude, 10).fetch();
+    const properties = Property.query()
+      .with('images')
+      .nearBy(latitude, longitude, 10)
+      .fetch();
 
     return properties;
   }
