@@ -10,3 +10,6 @@
 # The development sqlite file
 airbnb-server/database/*.sqlite
 
+# Prettier config file
+*/.prettierrc
+
