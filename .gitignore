@@ -1,14 +1,40 @@
+### Server ###
+
 # Node modules
-*/node_modules
+airbnb-server/node_modules
 
 # Adonis directory for storing tmp files
-*/tmp
+airbnb-server/tmp
 
 # Environment variables, never commit this file
-*/.env
+airbnb-server/.env
 
 # The development sqlite file
 airbnb-server/database/*.sqlite
+
+### Web ###
+
+# dependencies
+airbnb-web/node_modules
+airbnb-web/.pnp
+airbnb-web/.pnp.js
+
+# testing
+airbnb-web/coverage
+
+# production
+airbnb-web/build
+
+# misc
+airbnb-web/.DS_Store
+airbnb-web/.env.local
+airbnb-web/.env.development.local
+airbnb-web/.env.test.local
+airbnb-web/.env.production.local
+
+airbnb-web/npm-debug.log*
+airbnb-web/yarn-debug.log*
+airbnb-web/yarn-error.log*
 
 # Prettier config file
 */.prettierrc
