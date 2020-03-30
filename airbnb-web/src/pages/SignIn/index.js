@@ -1,48 +1,42 @@
 import React, { useState } from 'react';
 import { Link, withRouter, useHistory } from 'react-router-dom';
-import api from '../../services/api';
 
 import Logo from '../../assets/airbnb-logo.svg';
+import api from '../../services/api';
+import { login } from '../../services/auth';
 
 import { Form, Container } from './styles';
 
-function SignUp() {
-  const [username, setUsername] = useState('');
+function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const history = useHistory();
 
-  const handleSignUp = async e => {
+  const handleSignIn = async e => {
     e.preventDefault();
 
-    if (username.length === 0 || email.length === 0 || password.length === 0) {
-      setError('Preencha todos os dados para se cadastrar');
+    if (email.length === 0 || password.length === 0) {
+      setError('Preencha e-mail e senha para continuar');
     } else {
       try {
-        await api.post('/users', { username, email, password });
-        history.push('/');
+        const response = await api.post('/sessions', { email, password });
+        login(response.data.token);
+        history.push('/app');
       } catch (err) {
-        console.log(err);
-        setError('Ocorreu um erro ao registrar sua conta.');
+        setError('Houve um problema com o login, verifique suas credenciais.');
       }
     }
   };
 
   return (
     <Container>
-      <Form onSubmit={handleSignUp}>
+      <Form onSubmit={handleSignIn}>
         <img src={Logo} alt="Airbnb logo" />
         {error && <p>{error}</p>}
         <input
-          type="text"
-          placeholder="Nome de usuário"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-        />
-        <input
-          type="text"
+          type="email"
           placeholder="Endereço de email"
           value={email}
           onChange={e => setEmail(e.target.value)}
@@ -53,12 +47,12 @@ function SignUp() {
           value={password}
           onChange={e => setPassword(e.target.value)}
         />
-        <button type="submit">Cadastrar grátis</button>
+        <button type="submit">Entrar</button>
         <hr />
-        <Link to="/">Fazer login</Link>
+        <Link to="/signup">Criar conta grátis</Link>
       </Form>
     </Container>
   );
 }
 
-export default withRouter(SignUp);
+export default withRouter(SignIn);
