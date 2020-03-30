@@ -24,7 +24,7 @@ class PropertyController {
 
     const properties = Property.query()
       .with('images')
-      .nearBy(latitude, longitude, 1000)
+      .nearBy(latitude, longitude, 10)
       .fetch();
 
     return properties;
@@ -79,7 +79,15 @@ class PropertyController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({ params, request, response }) {}
+  async update({ params, request, response }) {
+    const property = await Property.findOrFail(params.id);
+
+    property.merge(request.body);
+
+    await property.save();
+
+    return property;
+  }
 
   /**
    * Delete a property with id.
