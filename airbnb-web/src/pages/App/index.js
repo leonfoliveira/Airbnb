@@ -1,7 +1,7 @@
-import React, { useState, useCallback, Fragment } from 'react';
-import { withRouter, useHistory } from 'react-router-dom';
+import React, { useState, Fragment } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import MapQL from 'react-map-gl';
-import PropTypes from 'prop-types';
 import { FaTimes, FaPlus, FaMapMarker } from 'react-icons/fa';
 
 import { Container, ButtonContainer, PointReference } from './styles';
@@ -14,7 +14,7 @@ import Button from './components/Button';
 
 const TOKEN = process.env.REACT_APP_MAPBOX_KEY;
 
-function Map({ width, height, match }) {
+function Map() {
   const [viewport, setViewport] = useState({
     latitude: -22.684172,
     longitude: -45.716829,
@@ -26,6 +26,7 @@ function Map({ width, height, match }) {
   const [addActivate, setAddActivate] = useState(false);
 
   const history = useHistory();
+  const location = useLocation();
 
   const loadProperties = async () => {
     const { latitude, longitude } = viewport;
@@ -56,7 +57,11 @@ function Map({ width, height, match }) {
   const handleAddProperty = () => {
     const { latitude, longitude } = viewport;
     history.push(
-      `${match.url}/properties/add?latitude=${latitude}&longitude=${longitude}`
+      `${location.pathname}/properties/add?latitude=${latitude}&longitude=${longitude}`,
+      //'/properties',
+      {
+        background: location,
+      }
     );
 
     setAddActivate(false);
@@ -92,15 +97,15 @@ function Map({ width, height, match }) {
   return (
     <Fragment>
       <MapQL
-        width={width}
-        height={height}
+        width={window.innerWidth}
+        height={window.innerHeight}
         {...viewport}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         mapboxApiAccessToken={TOKEN}
         onViewportChange={viewport => setViewport(viewport)}
         onViewStateChange={updatePropertiesLocalization}
       >
-        {!addActivate && <Properties match={match} properties={properties} />}
+        {!addActivate && <Properties properties={properties} />}
       </MapQL>
       {renderActions()}
       {renderButtonAdd()}
@@ -108,28 +113,10 @@ function Map({ width, height, match }) {
   );
 }
 
-const RouterMap = withRouter(Map);
-function App() {
-  const [width, setWidth] = useState(window.innerWidth);
-  const [height, setHeight] = useState(window.innerHeight);
-
-  const div = useCallback(node => {
-    if (node !== null) {
-      setHeight(node.getBoundingClientRect().height);
-      setWidth(node.getBoundingClientRect().width);
-    }
-  }, []);
-
-  return (
-    <Container ref={div}>
-      <RouterMap width={width} height={height} />
-    </Container>
-  );
-}
-
-Map.propTypes = {
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-};
+const App = () => (
+  <Container>
+    <Map />
+  </Container>
+);
 
 export default App;

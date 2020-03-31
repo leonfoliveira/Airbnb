@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, withRouter, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import api from '../../services/api';
 
 import Logo from '../../assets/airbnb-logo.svg';
@@ -22,7 +22,7 @@ function SignUp() {
     } else {
       try {
         await api.post('/users', { username, email, password });
-        history.push('/');
+        history.push('/login');
       } catch (err) {
         console.log(err);
         setError('Ocorreu um erro ao registrar sua conta.');
@@ -61,4 +61,4 @@ function SignUp() {
   );
 }
 
-export default withRouter(SignUp);
+export default SignUp;

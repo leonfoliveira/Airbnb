@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, withRouter, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import Logo from '../../assets/airbnb-logo.svg';
 import api from '../../services/api';
@@ -55,4 +55,4 @@ function SignIn() {
   );
 }
 
-export default withRouter(SignIn);
+export default SignIn;
