@@ -1,0 +1,15 @@
+{
+  "short_name": "Airbnb",
+  "name": "Airbnb Web",
+  "icons": [
+    {
+      "src": "logo256.png",
+      "type": "image/svg",
+      "sizes": "256x256"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#eee"
+}
