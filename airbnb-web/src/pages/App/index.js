@@ -2,9 +2,9 @@ import React, { useState, useCallback, Fragment } from 'react';
 import { withRouter, useHistory } from 'react-router-dom';
 import MapQL from 'react-map-gl';
 import PropTypes from 'prop-types';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaPlus, FaMapMarker } from 'react-icons/fa';
 
-import { Container, ButtonContainer } from './styles';
+import { Container, ButtonContainer, PointReference } from './styles';
 import api from '../../services/api';
 import { logout } from '../../services/auth';
 import useDebounce from '../../utils/useDebounce';
@@ -14,7 +14,7 @@ import Button from './components/Button';
 
 const TOKEN = process.env.REACT_APP_MAPBOX_KEY;
 
-function Map({ width, height }) {
+function Map({ width, height, match }) {
   const [viewport, setViewport] = useState({
     latitude: -22.684172,
     longitude: -45.716829,
@@ -22,8 +22,8 @@ function Map({ width, height }) {
     bearing: 0,
     pitch: 0,
   });
-
   const [properties, setProperties] = useState([]);
+  const [addActivate, setAddActivate] = useState(false);
 
   const history = useHistory();
 
@@ -53,6 +53,42 @@ function Map({ width, height }) {
     history.push('/');
   };
 
+  const handleAddProperty = () => {
+    const { latitude, longitude } = viewport;
+    history.push(
+      `${match.url}/properties/add?latitude=${latitude}&longitude=${longitude}`
+    );
+
+    setAddActivate(false);
+  };
+
+  const renderActions = () => (
+    <ButtonContainer>
+      <Button color="#fc6963" onClick={() => setAddActivate(true)}>
+        <FaPlus></FaPlus>
+      </Button>
+
+      <Button color="#222" onClick={handleLogout}>
+        <FaTimes />
+      </Button>
+    </ButtonContainer>
+  );
+
+  const renderButtonAdd = () =>
+    addActivate && (
+      <PointReference>
+        <FaMapMarker></FaMapMarker>
+        <div>
+          <button onClick={handleAddProperty} type="button">
+            Adicionar
+          </button>
+          <button onClick={() => setAddActivate(false)} className="cancel">
+            Cancelar
+          </button>
+        </div>
+      </PointReference>
+    );
+
   return (
     <Fragment>
       <MapQL
@@ -64,14 +100,10 @@ function Map({ width, height }) {
         onViewportChange={viewport => setViewport(viewport)}
         onViewStateChange={updatePropertiesLocalization}
       >
-        <Properties properties={properties} />
+        {!addActivate && <Properties match={match} properties={properties} />}
       </MapQL>
-
-      <ButtonContainer>
-        <Button color="#222" onClick={handleLogout}>
-          <FaTimes />
-        </Button>
-      </ButtonContainer>
+      {renderActions()}
+      {renderButtonAdd()}
     </Fragment>
   );
 }

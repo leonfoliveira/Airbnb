@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled, { StyledProps } from 'styled-components';
+import { darken } from 'polished';
 
 export const Button = styled.button`
   width: 60px;
@@ -8,13 +9,16 @@ export const Button = styled.button`
   background-color: ${({ color }) => color};
   margin-top: 10px;
   color: #fff;
+
   i {
     font-size: 18px;
   }
+
   &:hover {
-    filter: brightness(50%);
+    background-color: ${({ color }) => darken(0.5, `${color}`)};
   }
+
   &:active {
-    filter: brightness(70%);
+    background-color: ${({ color }) => darken(0.7, `${color}`)};
   }
 `;
