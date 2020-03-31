@@ -1,5 +1,5 @@
-import React, { useState, Fragment } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapQL from 'react-map-gl';
 import { FaTimes, FaPlus, FaMapMarker } from 'react-icons/fa';
@@ -26,7 +26,7 @@ function Map() {
   const [addActivate, setAddActivate] = useState(false);
 
   const history = useHistory();
-  const location = useLocation();
+  const match = useRouteMatch();
 
   const loadProperties = async () => {
     const { latitude, longitude } = viewport;
@@ -57,10 +57,9 @@ function Map() {
   const handleAddProperty = () => {
     const { latitude, longitude } = viewport;
     history.push(
-      `${location.pathname}/properties/add?latitude=${latitude}&longitude=${longitude}`,
-      //'/properties',
+      `${match.url}/properties/add?latitude=${latitude}&longitude=${longitude}`,
       {
-        background: location,
+        modal: 'ADD_PROPERTY',
       }
     );
 
@@ -95,7 +94,7 @@ function Map() {
     );
 
   return (
-    <Fragment>
+    <>
       <MapQL
         width={window.innerWidth}
         height={window.innerHeight}
@@ -109,7 +108,7 @@ function Map() {
       </MapQL>
       {renderActions()}
       {renderButtonAdd()}
-    </Fragment>
+    </>
   );
 }
 

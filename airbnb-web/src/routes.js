@@ -13,6 +13,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import App from './pages/App';
 import AddProperty from './pages/AddProperty';
+import Property from './pages/Property';
 
 const PrivateRoute = ({ children, ...rest }) => (
   <Route
@@ -30,7 +31,8 @@ const PrivateRoute = ({ children, ...rest }) => (
 const Routes = () => {
   const location = useLocation();
 
-  const background = location.state && location.state.background;
+  const addProperty = location.state && location.state.modal === 'ADD_PROPERTY';
+  const property = location.state && location.state.modal === 'PROPERTY';
 
   return (
     <Fragment>
@@ -46,9 +48,15 @@ const Routes = () => {
         </PrivateRoute>
       </Switch>
 
-      {background && (
+      {addProperty && (
         <Route path="/app/properties/add">
           <AddProperty />
+        </Route>
+      )}
+
+      {property && (
+        <Route path="/app/property/:id">
+          <Property />
         </Route>
       )}
     </Fragment>

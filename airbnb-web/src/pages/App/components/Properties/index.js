@@ -1,6 +1,6 @@
 import React from 'react';
 import { Marker } from 'react-map-gl';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { Pin } from './styles';
@@ -12,6 +12,8 @@ const intlMonetary = new Intl.NumberFormat('pt-BR', {
 });
 
 const Properties = ({ properties }) => {
+  const match = useRouteMatch();
+
   return properties.map(property => (
     <Marker
       key={property.id}
@@ -19,7 +21,16 @@ const Properties = ({ properties }) => {
       latitude={property.latitude}
     >
       <Pin>
-        <Link to="">{intlMonetary.format(property.price)}</Link>
+        <Link
+          to={{
+            pathname: `${match.url}/property/${property.id}`,
+            state: {
+              modal: 'PROPERTY',
+            },
+          }}
+        >
+          {intlMonetary.format(property.price)}
+        </Link>
       </Pin>
     </Marker>
   ));

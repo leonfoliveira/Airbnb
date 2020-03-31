@@ -1,26 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import PropTypes from 'prop-types';
 
 import { Dropzone } from './styles';
 
 function Files({ getFiles, handleError, handleDrop }) {
-  // const onDrop = useCallback(accepttedFiles => {
-  //   accepttedFiles.map(file => {
-  //     const reader = new FileReader();
-
-  //     reader.onerror = () => handleError('Erro no carregamento da imagem');
-
-  //     reader.readAsArrayBuffer(file);
-
-  //     return {
-  //       filename: file.filename,
-  //       buffer: reader.result,
-  //       preview: URL.createObjectURL(file),
-  //     };
-  //   });
-  // }, []);
-
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: acceptedFiles => {
